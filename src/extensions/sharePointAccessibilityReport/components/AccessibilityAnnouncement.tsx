@@ -1,80 +1,48 @@
 import * as React from "react";
 import { PrimaryButton } from "office-ui-fabric-react/lib/Button";
 import { Panel, PanelType } from "office-ui-fabric-react/lib/Panel";
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import styles from "./MyFavourites.module.scss";
 import * as strings from 'SharePointAccessibilityReportApplicationCustomizerStrings';
 import { ApplicationCustomizerContext } from "@microsoft/sp-application-base";
 import * as axe from 'axe-core';
+import styles from "./AccessibilityAnnouncement.module.scss";
 
-import { IItem } from "./item";
 
-export interface IMyFavouritesTopBarProps {
+export interface IAccessibilityReportTopBarProps {
     context: ApplicationCustomizerContext;
 }
 
-export interface IMyFavouritesTopBarState {
+export interface IAccessibilityReportTopBarState {
     showPanel: boolean;
-    showDialog: boolean;
-    dialogTitle: string;
-    myFavouriteItems: IItem[];
-    itemInContext: IItem;
-    isEdit: boolean;
-    status: JSX.Element;
-    disableButtons: boolean;
     data: Array<any>;
-    currentPage: number;
-    totalPages: number;
 }
 
-export class MyFavouritesTopBar extends React.Component<IMyFavouritesTopBarProps, IMyFavouritesTopBarState> {
-    constructor(props: IMyFavouritesTopBarProps) {
+export class AccessibilityReportTopBar extends React.Component<IAccessibilityReportTopBarProps, IAccessibilityReportTopBarState> {
+    constructor(props: IAccessibilityReportTopBarProps) {
         super(props);
         this.state = {
             showPanel: false,
-            showDialog: false,
-            dialogTitle: "",
-            myFavouriteItems: [],
-            itemInContext: {
-                Id: 0,
-                Title: "",
-                Description: "",
-            },
-            isEdit: false,
-            status: <Spinner size={SpinnerSize.large} label={strings.LoadingStatusLabel} />,
-            disableButtons: false,
-            data: [],
-            currentPage: 1,
-            totalPages: 1
+            data: []
         };
-        this.handleClick = this.handleClick.bind(this);
-    }
-
-    handleClick(event: any) {
-        this.setState({
-            currentPage: Number(event.target.id)
-        });
     }
 
     componentDidMount(): void {
         this.getAccessbility();
     }
 
-    public render(): React.ReactElement<IMyFavouritesTopBarProps> {
+    public render(): React.ReactElement<IAccessibilityReportTopBarProps> {
         return (
-            <div className={styles.ccTopBar} >
+            <div>
                 <PrimaryButton data-id="menuButton"
-                    title={strings.ShowMyFavouritesLabel}
-                    text={strings.ShowMyFavouritesLabel}
-                    ariaLabel={strings.ShowMyFavouritesLabel}
+                    title={strings.showAccessibilityReport}
+                    text={strings.showAccessibilityReport}
+                    ariaLabel={strings.showAccessibilityReport}
                     iconProps={{ iconName: "View" }}
-                    className={styles.ccTopBarButton}
                     onClick={this._showMenu}
                 />
                 <Panel isOpen={this.state.showPanel}
                     type={PanelType.medium}
                     onDismiss={this._hideMenu}
-                    headerText={strings.MyFavouritesHeader}
+                    headerText={strings.AccessibilityReportHeader}
                     isLightDismiss={true}
                 >
                     <div data-id="menuPanel" >
@@ -82,7 +50,7 @@ export class MyFavouritesTopBar extends React.Component<IMyFavouritesTopBarProps
                             return (
                                 <div>
                                     <h2>Issue Type:</h2>
-                                    <table>
+                                    <table className={styles.accessibilityPanelTable}>
                                         <thead>
                                             <th>ID</th>
                                             <th>Impact</th>
@@ -98,7 +66,7 @@ export class MyFavouritesTopBar extends React.Component<IMyFavouritesTopBarProps
                                     </table>
 
                                     <h3>Issue details:</h3>
-                                    <table>
+                                    <table className={styles.accessibilityPanelTable}>
                                         <thead>
                                             <th>Summary</th>
                                             <th>HTML</th>
@@ -116,7 +84,7 @@ export class MyFavouritesTopBar extends React.Component<IMyFavouritesTopBarProps
                                     </table>
 
                                     <h3>Issues found:</h3>
-                                    <table>
+                                    <table className={styles.accessibilityPanelTable}>
                                         <thead>
                                             <th>ID</th>
                                             <th>Message</th>
@@ -132,6 +100,7 @@ export class MyFavouritesTopBar extends React.Component<IMyFavouritesTopBarProps
                                             })}
                                         </tbody>
                                     </table>
+                                    <p>----------------------------------------------------------------------------------</p>
                                 </div>
                             )
                         })}
@@ -155,18 +124,14 @@ export class MyFavouritesTopBar extends React.Component<IMyFavouritesTopBarProps
             .then(async results => {
                 if (results.violations.length) {
                     this.setState({ data: results.violations });
-                    this.setState({ totalPages: results.violations.length })
                     console.log(this.state.data);
-                    console.log(this.state.totalPages);
                 }
                 else {
                     console.log("No violations")
-                    this.setState({ data: ["No violations"] });
                 }
             })
             .catch(err => {
                 console.log(err.message);
-                this.setState({ data: ["Hum"] });
             });
     }
 

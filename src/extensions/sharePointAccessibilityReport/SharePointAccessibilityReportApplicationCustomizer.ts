@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 import { override } from '@microsoft/decorators';
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base';
 
-import { IMyFavouritesTopBarProps, MyFavouritesTopBar } from "./components/AccessibilityAnnouncement";
+import { IAccessibilityReportTopBarProps, AccessibilityReportTopBar } from "./components/AccessibilityAnnouncement";
 
 
 export interface ISharePointAccessibilityReportApplicationCustomizerProperties {
@@ -22,15 +22,10 @@ export default class SharePointAccessibilityReportApplicationCustomizer
       return Promise.reject(error);
     }
 
-    // init the react top bar component.
-    const element: React.ReactElement<IMyFavouritesTopBarProps> = React.createElement(
-      MyFavouritesTopBar,
-      {
-        context: this.context
-      }
+    const element: React.ReactElement<IAccessibilityReportTopBarProps> = React.createElement(
+      AccessibilityReportTopBar, { context: this.context }
     );
 
-    // render the react element in the top placeholder.
     ReactDOM.render(element, placeholder.domElement);
 
     return Promise.resolve();
