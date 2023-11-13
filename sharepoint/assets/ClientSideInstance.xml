@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+    <ClientSideComponentInstance
+        Title="SharePointAccessibilityReport"
+        Location="ClientSideExtension.ApplicationCustomizer"
+        ComponentId="6427c8d8-4b60-4e8b-b308-a76ec34eeb1a"
+        Properties="{&quot;testMessage&quot;:&quot;Test message&quot;}">
+    </ClientSideComponentInstance>
+</Elements>
