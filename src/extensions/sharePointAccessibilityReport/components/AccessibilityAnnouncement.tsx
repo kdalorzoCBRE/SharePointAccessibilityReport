@@ -26,13 +26,17 @@ export class AccessibilityReportTopBar extends React.Component<IAccessibilityRep
     }
 
     componentDidMount(): void {
-        this.getAccessbility();
+        // Timeout is set to ensure the DOM is completeley render before running the accessbility report 
+        setTimeout(() => {
+            this.getAccessbility();
+        }, 1000)
     }
 
     public render(): React.ReactElement<IAccessibilityReportTopBarProps> {
         return (
-            <div>
+            <div title="AccessibilityChecker">
                 <PrimaryButton data-id="menuButton"
+                    id="ShowAccessibilityReport"
                     title={strings.showAccessibilityReport}
                     text={strings.showAccessibilityReport}
                     ariaLabel={strings.showAccessibilityReport}
@@ -44,8 +48,9 @@ export class AccessibilityReportTopBar extends React.Component<IAccessibilityRep
                     onDismiss={this._hideMenu}
                     headerText={strings.AccessibilityReportHeader}
                     isLightDismiss={true}
+                    id="AccessibilityReportPanel"
                 >
-                    <div data-id="menuPanel" >
+                    <div data-id="menuPanel" id="AccessibilityReport">
                         {this.state.data.map(function (item: any, key: any) {
                             return (
                                 <div>
@@ -120,7 +125,7 @@ export class AccessibilityReportTopBar extends React.Component<IAccessibilityRep
 
     private getAccessbility() {
         axe
-            .run()
+            .run(".CanvasComponent")
             .then(async results => {
                 if (results.violations.length) {
                     this.setState({ data: results.violations });
