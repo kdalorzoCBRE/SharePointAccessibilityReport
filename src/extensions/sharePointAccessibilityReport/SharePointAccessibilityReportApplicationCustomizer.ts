@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 import { override } from '@microsoft/decorators';
 import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-application-base';
 
-import { IAccessibilityReportTopBarProps, AccessibilityReportTopBar } from "./components/AccessibilityAnnouncement";
+import { IAccessibilityReportTopBarProps, AccessibilityReportTopBar } from "./components/AccessibilityReportTopBar";
 
 
 export interface ISharePointAccessibilityReportApplicationCustomizerProperties {
