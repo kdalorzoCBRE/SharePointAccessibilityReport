@@ -4,7 +4,7 @@
   "https": true,
   "serveConfigurations": {
     "default": {
-      "pageUrl": "https://m365x52564958.sharepoint.com/SitePages/home.aspx",
+      "pageUrl": "https://m365x67581472.sharepoint.com/SitePages/home.aspx",
       "customActions": {
         "6427c8d8-4b60-4e8b-b308-a76ec34eeb1a": {
           "location": "ClientSideExtension.ApplicationCustomizer",
@@ -15,7 +15,7 @@
       }
     },
     "sharePointAccessibilityReport": {
-      "pageUrl": "https://m365x52564958.sharepoint.com/SitePages/home.aspx",
+      "pageUrl": "https://m365x67581472.sharepoint.com/SitePages/home.aspx",
       "customActions": {
         "6427c8d8-4b60-4e8b-b308-a76ec34eeb1a": {
           "location": "ClientSideExtension.ApplicationCustomizer",
