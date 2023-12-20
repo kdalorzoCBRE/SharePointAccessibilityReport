@@ -5,7 +5,6 @@ import { BaseApplicationCustomizer, PlaceholderName } from '@microsoft/sp-applic
 
 import { IAccessibilityReportTopBarProps, AccessibilityReportTopBar } from "./components/AccessibilityReportTopBar";
 
-
 export interface ISharePointAccessibilityReportApplicationCustomizerProperties {
   testMessage: string;
 }
@@ -25,7 +24,6 @@ export default class SharePointAccessibilityReportApplicationCustomizer
     const element: React.ReactElement<IAccessibilityReportTopBarProps> = React.createElement(
       AccessibilityReportTopBar, { context: this.context }
     );
-
     ReactDOM.render(element, placeholder.domElement);
 
     return Promise.resolve();

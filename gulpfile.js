@@ -14,3 +14,22 @@ build.rig.getTasks = function () {
 };
 
 build.initialize(require('gulp'));
+
+// TODO: Do we need this?
+// build.configureWebpack.mergeConfig({
+//   additionalConfiguration: (generatedConfiguration) => {
+//     generatedConfiguration.module.rules.push({
+//         test: /\.[jt]sx?$/,
+//         use: [
+//           {
+//             loader: 'esbuild-loader',
+//             options: {
+//               target: 'es2015'
+//             }
+//           }
+//         ]
+//       }
+//     );
+//     return generatedConfiguration;
+//   }
+// });
