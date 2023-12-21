@@ -17,7 +17,7 @@ export class AccessibilityChatBot extends React.Component<IChatBotProps, IChatBo
     public render(): React.ReactElement<IChatBotProps> {
         return (
             <div id="webchatContainer" hidden={this.props.visibleChatBot} className={styles.webchatContainer}>
-                <div id="webchat" role="main" style={{ height: "100%" }}>
+                <div id="webchat" role="main" style={{ height: "100%", borderColor: "gray" }}>
                 </div>
             </div>
         );
