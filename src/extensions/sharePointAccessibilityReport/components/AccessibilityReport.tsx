@@ -2,19 +2,20 @@ import * as React from "react";
 import * as axe from 'axe-core';
 import "./AccessibilityReport.module.scss";
 
-
 export interface IAccessibilityReportProps {
 }
 
 export interface IAccessibilityReportState {
     data: Array<any>;
+    showChatBot: boolean;
 }
 
 export class AccessibilityReport extends React.Component<IAccessibilityReportProps, IAccessibilityReportState> {
     constructor(props: IAccessibilityReportProps) {
         super(props);
         this.state = {
-            data: []
+            data: [],
+            showChatBot: false,
         };
     }
 
@@ -62,6 +63,7 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
                         </div>
                     )
                 })}
+
             </div>
         );
     }

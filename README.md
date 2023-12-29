@@ -74,4 +74,5 @@ This extension illustrates the following concepts:
 
 
 ## Based on: 
-https://github.com/pnp/sp-dev-fx-extensions/tree/8c7c0eabd884e7ad5e36672e1d91b989cf8dc4e9/samples/react-application-myfavourites
+- Extension: https://github.com/pnp/sp-dev-fx-extensions/tree/8c7c0eabd884e7ad5e36672e1d91b989cf8dc4e9/samples/react-application-myfavourites
+- WebChat: https://purple.telstra.com/blog/power-virtual-agents-share-point

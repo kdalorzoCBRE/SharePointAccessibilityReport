@@ -4,6 +4,8 @@ import { Panel, PanelType } from "office-ui-fabric-react/lib/Panel";
 import * as strings from 'SharePointAccessibilityReportApplicationCustomizerStrings';
 import { ApplicationCustomizerContext } from "@microsoft/sp-application-base";
 import { AccessibilityReport } from "./AccessibilityReport";
+import { AccessibilityChatBotButton } from "./AccessibilityChatBotButton";
+import { AccessibilityChatBot } from "./AccessibilityChatBot"
 
 export interface IAccessibilityReportTopBarProps {
     context: ApplicationCustomizerContext;
@@ -11,6 +13,7 @@ export interface IAccessibilityReportTopBarProps {
 
 export interface IAccessibilityReportTopBarState {
     showPanel: boolean;
+    showChatBot: boolean;
 }
 
 export class AccessibilityReportTopBar extends React.Component<IAccessibilityReportTopBarProps, IAccessibilityReportTopBarState> {
@@ -18,6 +21,7 @@ export class AccessibilityReportTopBar extends React.Component<IAccessibilityRep
         super(props);
         this.state = {
             showPanel: false,
+            showChatBot: false,
         };
     }
 
@@ -32,6 +36,7 @@ export class AccessibilityReportTopBar extends React.Component<IAccessibilityRep
                     iconProps={{ iconName: "View" }}
                     onClick={this._showMenu}
                 />
+                <AccessibilityChatBotButton onclickHandler={this.handleShowChatBot} />
                 <Panel isOpen={this.state.showPanel}
                     type={PanelType.medium}
                     onDismiss={this._hideMenu}
@@ -41,6 +46,7 @@ export class AccessibilityReportTopBar extends React.Component<IAccessibilityRep
                 >
                     <AccessibilityReport />
                 </Panel>
+                <AccessibilityChatBot visibleChatBot={this.state.showChatBot} />
             </div>
         );
     }
@@ -52,4 +58,10 @@ export class AccessibilityReportTopBar extends React.Component<IAccessibilityRep
     private _hideMenu = () => {
         this.setState({ showPanel: false });
     }
+
+    public handleShowChatBot = () => {
+        this.setState(prevState => ({ showChatBot: !prevState.showChatBot }))
+        console.log(this.state.showChatBot)
+    }
+
 }

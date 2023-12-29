@@ -17,7 +17,9 @@
     "@microsoft/sp-core-library": "1.18.0",
     "@microsoft/sp-dialog": "1.18.0",
     "axe-core": "^4.8.2",
+    "botframework-webchat": "^4.16.0",
     "office-ui-fabric-react": "^7.204.0",
+    "p-defer-es5": "^2.0.1",
     "react": "^17.0.1",
     "react-bootstrap": "^2.9.1",
     "react-dom": "^17.0.1",
@@ -32,6 +34,7 @@
     "@rushstack/eslint-config": "2.5.1",
     "@types/webpack-env": "~1.15.2",
     "ajv": "^6.12.5",
+    "esbuild-loader": "^4.0.2",
     "eslint": "8.7.0",
     "gulp": "4.0.2",
     "typescript": "4.7.4"
