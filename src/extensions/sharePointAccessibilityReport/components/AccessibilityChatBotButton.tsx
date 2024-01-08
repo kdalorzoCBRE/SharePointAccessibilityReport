@@ -77,6 +77,10 @@ export class AccessibilityChatBotButton extends React.Component<IChatBotProps, I
             }
         });
 
+        const styleOptions = {
+            bubbleBackground: 'rgba(0, 0, 255, .1)',
+            bubbleFromUserBackground: 'rgba(0, 255, 0, .1)'
+        };
 
         fetch(theURL)
             .then(response => response.json())
@@ -86,7 +90,8 @@ export class AccessibilityChatBotButton extends React.Component<IChatBotProps, I
                         directLine: ReactWebChat.createDirectLine({
                             token: conversationInfo.token,
                         }),
-                        store: store
+                        store: store,
+                        styleOptions: styleOptions
                     },
                     document.getElementById('webchat')
                 );
