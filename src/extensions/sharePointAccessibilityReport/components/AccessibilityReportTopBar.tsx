@@ -4,7 +4,6 @@ import { Panel, PanelType } from "office-ui-fabric-react/lib/Panel";
 import * as strings from 'SharePointAccessibilityReportApplicationCustomizerStrings';
 import { ApplicationCustomizerContext } from "@microsoft/sp-application-base";
 import { AccessibilityReport } from "./AccessibilityReport";
-import { AccessibilityChatBotButton } from "./AccessibilityChatBotButton";
 import { AccessibilityChatBot } from "./AccessibilityChatBot"
 
 export interface IAccessibilityReportTopBarProps {
@@ -36,7 +35,7 @@ export class AccessibilityReportTopBar extends React.Component<IAccessibilityRep
                     iconProps={{ iconName: "View" }}
                     onClick={this._showMenu}
                 />
-                <AccessibilityChatBotButton onclickHandler={this.handleShowChatBot} />
+
                 <Panel isOpen={this.state.showPanel}
                     type={PanelType.medium}
                     onDismiss={this._hideMenu}
@@ -44,9 +43,9 @@ export class AccessibilityReportTopBar extends React.Component<IAccessibilityRep
                     isLightDismiss={true}
                     id="AccessibilityReportPanel"
                 >
-                    <AccessibilityReport />
+                    <AccessibilityReport context={this.props.context} onclickHandler={this.handleShowChatBot} />
                 </Panel>
-                <AccessibilityChatBot visibleChatBot={this.state.showChatBot} />
+                <AccessibilityChatBot showChatBot={this.state.showChatBot} />
             </div>
         );
     }
@@ -60,8 +59,13 @@ export class AccessibilityReportTopBar extends React.Component<IAccessibilityRep
     }
 
     public handleShowChatBot = () => {
-        this.setState(prevState => ({ showChatBot: !prevState.showChatBot }))
-        console.log(this.state.showChatBot)
+        console.log("previous chatbot state: " + this.state.showChatBot)
+        this.setState(
+            {
+                showChatBot: true,
+                showPanel: false
+            })
+        console.log("chatbot state: " + this.state.showChatBot)
     }
 
 }
