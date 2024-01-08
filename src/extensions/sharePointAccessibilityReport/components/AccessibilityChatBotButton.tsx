@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as ReactWebChat from 'botframework-webchat';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import styles from "./AccessibilityReport.module.scss";
 
 export interface IChatBotProps {
     onclickHandler: () => void
@@ -30,6 +31,7 @@ export class AccessibilityChatBotButton extends React.Component<IChatBotProps, I
                 text="Accessibilty Chatbot"
                 id="ShowAccessibilityBot"
                 iconProps={{ iconName: "View" }}
+                className={styles.chatbotMainButton}
             />
         );
     }

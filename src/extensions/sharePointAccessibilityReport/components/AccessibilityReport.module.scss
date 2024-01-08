@@ -13,7 +13,7 @@ td {
     position: fixed;
     bottom: 0;
     right: 0;
-    padding-bottom: 2%;
+    padding-bottom: 3%;
     height: 65%;
     width: 25%;
     padding-right: 30px;
@@ -43,4 +43,14 @@ td {
 
 .webchatHeaderfiller {
     flex: 0 10000 100%;
+}
+
+.pagination {
+    display: flex;
+    flex-direction: row;
+    left: 50%;
+}
+
+.chatbotMainButton {
+    margin: 10px;
 }
