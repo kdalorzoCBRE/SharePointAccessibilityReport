@@ -20,3 +20,9 @@ td {
     z-index: 100;
     border: 1px black;
 }
+
+.pagination {
+    display: flex;
+    flex-direction: row;
+    left: 50%;
+}
