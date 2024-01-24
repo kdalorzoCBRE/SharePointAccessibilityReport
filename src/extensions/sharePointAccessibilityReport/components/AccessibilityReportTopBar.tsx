@@ -22,6 +22,10 @@ export class AccessibilityReportTopBar extends React.Component<IAccessibilityRep
             showPanel: false,
             showChatBot: false,
         };
+
+        this.handleShowChatBot = this.handleShowChatBot.bind(this);
+        this._hideMenu = this._hideMenu.bind(this);
+        this._showMenu = this._showMenu.bind(this);
     }
 
     public render(): React.ReactElement<IAccessibilityReportTopBarProps> {
@@ -43,7 +47,7 @@ export class AccessibilityReportTopBar extends React.Component<IAccessibilityRep
                     isLightDismiss={true}
                     id="AccessibilityReportPanel"
                 >
-                    <AccessibilityReport context={this.props.context} onclickHandler={this.handleShowChatBot} />
+                    <AccessibilityReport context={this.props.context} handleShowChatBot={this.handleShowChatBot} />
                 </Panel>
                 <AccessibilityChatBot showChatBot={this.state.showChatBot} />
             </div>
@@ -51,21 +55,25 @@ export class AccessibilityReportTopBar extends React.Component<IAccessibilityRep
     }
 
     private _showMenu = () => {
-        this.setState({ showPanel: true });
+        console.log("show menu previous chatbot state: " + this.state.showChatBot)
+        this.setState({ showPanel: true, showChatBot: false });
+        console.log("show menu chatbot state: " + this.state.showChatBot)
     }
 
     private _hideMenu = () => {
-        this.setState({ showPanel: false });
+        console.log("hide menu previous chatbot state: " + this.state.showChatBot)
+        this.setState({ showPanel: false, showChatBot: false });
+        console.log("hide menu chatbot state: " + this.state.showChatBot)
     }
 
     public handleShowChatBot = () => {
-        console.log("previous chatbot state: " + this.state.showChatBot)
+        console.log("handle previous chatbot state: " + this.state.showChatBot)
         this.setState(
             {
                 showChatBot: true,
                 showPanel: false
             })
-        console.log("chatbot state: " + this.state.showChatBot)
+        console.log("handle chatbot state: " + this.state.showChatBot)
     }
 
 }

@@ -36,11 +36,13 @@ td {
     gap: 10px;
 }
 
-.ElementWithIssue p,h3 {
+.ElementWithIssue p,
+h3 {
     margin: 10px 0px 10px 0px;
 }
 
-.simpleDescription p,h3{
+.simpleDescription p,
+h3 {
     margin: 10px 0px 10px 0px;
 }
 
@@ -78,7 +80,8 @@ td {
     border-collapse: collapse;
 }
 
-.infoTable th, td {
+.infoTable th,
+td {
     padding: 5px;
 }
 
@@ -174,4 +177,8 @@ td {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border: 1px solid lightgray;
+    margin-top: 15%;
+    border-radius: 10px;
+    background-color: lightgray;
 }
