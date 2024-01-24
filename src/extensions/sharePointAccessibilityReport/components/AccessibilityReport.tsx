@@ -3,9 +3,20 @@ import * as axe from 'axe-core';
 import styles from "./AccessibilityReport.module.scss";
 import { ErrorCircle24Regular } from '@fluentui/react-icons';
 /*import { Button } from '@fluentui/react-components';*/
-
+import { spfi, SPFx } from "@pnp/sp";
+import "@pnp/sp/webs";
+import "@pnp/sp/lists";
+import "@pnp/sp/items";
+import { LogLevel, PnPLogging } from "@pnp/logging";
+import { IItemAddResult } from "@pnp/sp/items";
+import { ApplicationCustomizerContext } from "@microsoft/sp-application-base";
+import { getGUID } from "@pnp/core";
+import { AccessibilityChatBotButton } from "./AccessibilityChatBotButton";
+import { AccessibilityError } from "./AccessibilityError";
 
 export interface IAccessibilityReportProps {
+    context: ApplicationCustomizerContext,
+    onclickHandler: () => void
 }
 
 export interface IAccessibilityReportState {
@@ -17,6 +28,8 @@ export interface IAccessibilityReportState {
     upperPageBound:number;
     lowerPageBound:number;
     pageBound:number;
+    showChatBot: boolean;
+    runID: string;
 }
 
 export class AccessibilityReport extends React.Component<IAccessibilityReportProps, IAccessibilityReportState> {
@@ -31,6 +44,8 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
             pageBound: 3,
             isPrevBtnActive: 'disabled',
             isNextBtnActive: ''
+            showChatBot: false,
+            runID: getGUID()
         };
         this.handleClick = this.handleClick.bind(this);
         this.btnNextClick = this.btnNextClick.bind(this);
@@ -45,7 +60,7 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
         }, 100)
     }
 
-    getAccessbility() {
+    private getAccessbility() {
         // ToDo: add error message in panel
         axe
             .run(".CanvasComponent")
@@ -53,13 +68,18 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
                 if (results.violations.length) {
                     this.setState({ data: results.violations });
                     console.log("Accessibility Violations", this.state.data);
+                    return results.violations;
                 }
                 else {
                     console.log("No violations")
                 }
+                return []
+            })
+            .then(violations => {
+                this.saveAccessibilityErrorsInList();
             })
             .catch(err => {
-                console.log(err.message);
+                console.log("Error on get accessibility: " + err.message);
             });
     }
 
@@ -252,109 +272,50 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
                         {renderNextBtn}
                     </div>
                 </div>
+                <div>
+                    <p> Want to learn more about the web accessibility issues? Chat with our AI bot for help: </p>
+                    <AccessibilityChatBotButton onclickHandler={this.props.onclickHandler} runID={this.state.runID} />
+                </div>
             </div>
         );
     }
 }
 
+    private saveAccessibilityErrorsInList() {
 
+        const runDate = new Date();
 
-        /*return (
-            <div data-id="menuPanel" id="AccessibilityReport">
-                {this.state.data.map(issue => {
-                        <div>
-                            <div className="AccessibilityReportHeader">
-                                <h3>Element with Accessibility Issue</h3>
-                                <p>{issue.id}</p>
-                            </div>
-                            <div className="AccessibilityReportBody">
-                                <div className="simpleDescription">
-                                    <h4>Simple Description of Issue</h4>
-                                    <p>{issue.help}</p>
-                                </div>
-                                <div className="description">
-                                    <h4>Description</h4>
-                                    <p>{issue.description}</p>
-                                </div>
-                                <div className="impact">
-                                    <h4>Impact</h4>
-                                    <p>{issue.impact}</p>
-                                </div>
-                                <div className="helpUrl">
-                                    <h4>Helpful Link</h4>
-                                    <a href={issue.helpUrl} target="_blank" rel="noopener noreferrer">{issue.helpUrl}</a>
-                                </div>
-                                <div>
-                                    <h3>Instances of Accessibility Issues</h3>
-                                        {console.log(issue.nodes[0])}
-                                        <p>{issue.nodes[0].failureSummary}</p>
-                                </div>
-                            </div>
-                            <p>----------------------------------------------------------------------------------</p>
-                        </div>
-                    })
-                })
-            </div>
-        );*/
+        this.state.data.forEach(e1 => {
+            e1.nodes.forEach((e2: any) => {
+                e2.any.forEach((e3: any) => {
+                    const acccessibilityError = new AccessibilityError(
+                        this.state.runID,
+                        runDate,
+                        e1.id,
+                        e1.impact,
+                        e1.description,
+                        e2.failureSummary,
+                        e2.html,
+                        e3.id,
+                        e3.message
+                    )
+                    this.saveErrorsInList(acccessibilityError)
+                });
+            });
 
+        });
+    }
 
+    private saveErrorsInList(accessbilityError: AccessibilityError) {
+        const sp = spfi().using(SPFx(this.props.context)).using(PnPLogging(LogLevel.Warning));
 
+        const listName = "Accessibility Bugs";
 
-
-
-/*                                {issue.nodes.map((issueNode: { html: any; }) => 
-                                    <p>{issueNode.html}</p>
-                                )} */
-
-/*<h2>Issue Type:</h2>
-<table className={styles.accessibilityPanelTable}>
-    <thead>
-        <th>ID</th>
-        <th>Impact</th>
-        <th>Description</th>
-    </thead>
-    <tbody>
-        <tr key={key}>
-            <td>{item.id}</td>
-            <td>{item.impact}</td>
-            <td>{item.description}</td>
-        </tr>
-    </tbody>
-</table>
-
-<h3>Issue details:</h3>
-<table className={styles.accessibilityPanelTable}>
-    <thead>
-        <th>Summary</th>
-        <th>HTML</th>
-    </thead>
-    <tbody>
-        {item.nodes.map(function (item2: any, key2: any) {
-            return (
-                <tr key={key2}>
-                    <td>{item2.failureSummary}</td>
-                    <td>{item2.html}</td>
-                </tr>
-            )
-        })}
-    </tbody>
-</table>
-
-<h3>Issues found:</h3>
-<table className={styles.accessibilityPanelTable}>
-    <thead>
-        <th>ID</th>
-        <th>Message</th>
-    </thead>
-    <tbody>
-        {item.nodes[0].any.map(function (item3: any, key3: any) {
-            return (
-                <tr key={key3}>
-                    <td>{item3.id}</td>
-                    <td>{item3.message}</td>
-                </tr>
-            )
-        })}
-    </tbody>
-</table>
-<p>----------------------------------------------------------------------------------</p>*/
+        sp.web.lists.getByTitle(listName).items
+            .add(accessbilityError.toJSON())
+            .then((result: IItemAddResult): void => {
+            }, (error: any): void => {
+                console.log("error on save errors in list: " + error)
+            });
+    }
+}

@@ -17,6 +17,8 @@
     "@microsoft/sp-application-base": "1.18.0",
     "@microsoft/sp-core-library": "1.18.0",
     "@microsoft/sp-dialog": "1.18.0",
+    "@pnp/logging": "^3.21.0",
+    "@pnp/sp": "^3.21.0",
     "axe-core": "^4.8.2",
     "botframework-webchat": "^4.16.0",
     "office-ui-fabric-react": "^7.204.0",

@@ -13,8 +13,8 @@ td {
     position: fixed;
     bottom: 0;
     right: 0;
-    padding-bottom: 2%;
-    height: 500px;
+    padding-bottom: 3%;
+    height: 65%;
     width: 25%;
     padding-right: 30px;
     z-index: 100;
@@ -119,6 +119,29 @@ td {
     margin-top: 7px;
 }
 
+.webchat {
+    border: 1px solid lightgray;
+    height: 100%;
+}
+
+
+.webchatHeader {
+    background-color: lightgray;
+    height: 6%;
+    display: flex;
+}
+
+.webchatHeaderText {
+    padding-left: 5%;
+    margin: 0%;
+    padding-top: 2%;
+
+}
+
+.webchatHeaderfiller {
+    flex: 0 10000 100%;
+}
+
 .pagination {
     display: flex;
     flex-direction: row;
@@ -139,5 +162,8 @@ td {
 
 .pageNumbers a {
     margin-left: 10px;
-    margin-right: 10px;
+}
+
+.chatbotMainButton {
+    margin: 10px;
 }
