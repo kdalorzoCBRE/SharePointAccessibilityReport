@@ -147,6 +147,7 @@ td {
     flex-direction: row;
     width: 100%;
     justify-content: center;
+    margin-bottom: 10px;
 }
 
 .renderPageNumbers {
@@ -166,4 +167,11 @@ td {
 
 .chatbotMainButton {
     margin: 10px;
+}
+
+.chatBotFooter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

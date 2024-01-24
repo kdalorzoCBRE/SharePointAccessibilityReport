@@ -43,7 +43,7 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
             lowerPageBound: 0,
             pageBound: 3,
             isPrevBtnActive: 'disabled',
-            isNextBtnActive: ''
+            isNextBtnActive: '',
             showChatBot: false,
             runID: getGUID()
         };
@@ -80,6 +80,44 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
             })
             .catch(err => {
                 console.log("Error on get accessibility: " + err.message);
+            });
+    }
+
+    private saveAccessibilityErrorsInList() {
+
+        const runDate = new Date();
+
+        this.state.data.forEach(e1 => {
+            e1.nodes.forEach((e2: any) => {
+                e2.any.forEach((e3: any) => {
+                    const acccessibilityError = new AccessibilityError(
+                        this.state.runID,
+                        runDate,
+                        e1.id,
+                        e1.impact,
+                        e1.description,
+                        e2.failureSummary,
+                        e2.html,
+                        e3.id,
+                        e3.message
+                    )
+                    this.saveErrorsInList(acccessibilityError)
+                });
+            });
+
+        });
+    }
+
+    private saveErrorsInList(accessbilityError: AccessibilityError) {
+        const sp = spfi().using(SPFx(this.props.context)).using(PnPLogging(LogLevel.Warning));
+
+        const listName = "Accessibility Bugs";
+
+        sp.web.lists.getByTitle(listName).items
+            .add(accessbilityError.toJSON())
+            .then((result: IItemAddResult): void => {
+            }, (error: any): void => {
+                console.log("error on save errors in list: " + error)
             });
     }
 
@@ -126,6 +164,11 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
         this.setState({currentPage: listid});
         this.setPrevAndNextBtnClass(listid);
     }
+
+    /*btnShowInstance() {
+        console.log("I am in here");
+    }*/
+
 
     public render(): React.ReactElement<IAccessibilityReportProps> {
 
@@ -191,10 +234,6 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
                 </div>
             )    
         });
-
-        /*btnShowInstance(): any {
-            console.log("I am in here");
-        }*/
 
         const pageNumbers = [];
         for (let i = 1; i <= Math.ceil(data.length / issuePerPage); i++) {
@@ -272,50 +311,11 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
                         {renderNextBtn}
                     </div>
                 </div>
-                <div>
+                <div className={styles.chatBotFooter}>
                     <p> Want to learn more about the web accessibility issues? Chat with our AI bot for help: </p>
                     <AccessibilityChatBotButton onclickHandler={this.props.onclickHandler} runID={this.state.runID} />
                 </div>
             </div>
         );
-    }
-}
-
-    private saveAccessibilityErrorsInList() {
-
-        const runDate = new Date();
-
-        this.state.data.forEach(e1 => {
-            e1.nodes.forEach((e2: any) => {
-                e2.any.forEach((e3: any) => {
-                    const acccessibilityError = new AccessibilityError(
-                        this.state.runID,
-                        runDate,
-                        e1.id,
-                        e1.impact,
-                        e1.description,
-                        e2.failureSummary,
-                        e2.html,
-                        e3.id,
-                        e3.message
-                    )
-                    this.saveErrorsInList(acccessibilityError)
-                });
-            });
-
-        });
-    }
-
-    private saveErrorsInList(accessbilityError: AccessibilityError) {
-        const sp = spfi().using(SPFx(this.props.context)).using(PnPLogging(LogLevel.Warning));
-
-        const listName = "Accessibility Bugs";
-
-        sp.web.lists.getByTitle(listName).items
-            .add(accessbilityError.toJSON())
-            .then((result: IItemAddResult): void => {
-            }, (error: any): void => {
-                console.log("error on save errors in list: " + error)
-            });
     }
 }
