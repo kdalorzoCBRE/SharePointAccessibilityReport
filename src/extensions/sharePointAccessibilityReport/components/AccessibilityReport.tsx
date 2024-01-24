@@ -21,13 +21,13 @@ export interface IAccessibilityReportProps {
 
 export interface IAccessibilityReportState {
     data: Array<any>;
-    currentPage:number;
-    issuePerPage:number;
-    isPrevBtnActive:string;
-    isNextBtnActive:string;
-    upperPageBound:number;
-    lowerPageBound:number;
-    pageBound:number;
+    currentPage: number;
+    issuePerPage: number;
+    isPrevBtnActive: string;
+    isNextBtnActive: string;
+    upperPageBound: number;
+    lowerPageBound: number;
+    pageBound: number;
     showChatBot: boolean;
     runID: string;
 }
@@ -83,6 +83,148 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
             });
     }
 
+    handleClick(event: any) {
+        let listid = Number(event.target.id)
+        this.setState({
+            currentPage: Number(event.target.id)
+        })
+        this.setPrevAndNextBtnClass(listid);
+    }
+
+    setPrevAndNextBtnClass(listid: any) {
+        let totalPage = Math.ceil(this.state.data.length / this.state.issuePerPage);
+        this.setState({ isNextBtnActive: 'disabled' });
+        this.setState({ isPrevBtnActive: 'disabled' });
+        if (totalPage === listid && totalPage > 1) {
+            this.setState({ isPrevBtnActive: '' });
+        }
+        else if (listid === 1 && totalPage > 1) {
+            this.setState({ isNextBtnActive: '' });
+        }
+        else if (totalPage > 1) {
+            this.setState({ isNextBtnActive: '' });
+            this.setState({ isPrevBtnActive: '' });
+        }
+    }
+
+    btnPrevClick() {
+        let listid = this.state.currentPage - 1;
+        this.setState({ currentPage: listid });
+        this.setPrevAndNextBtnClass(listid);
+    }
+
+    btnNextClick() {
+        let listid = this.state.currentPage + 1;
+        this.setState({ currentPage: listid });
+        this.setPrevAndNextBtnClass(listid);
+    }
+
+    public render(): React.ReactElement<IAccessibilityReportProps> {
+
+        const { data, currentPage, issuePerPage, isNextBtnActive, isPrevBtnActive } = this.state;
+
+        const indexOfLastIssue = currentPage * issuePerPage;
+        const indexOfFirstIssue = indexOfLastIssue - issuePerPage;
+        const currentIssues = data.slice(indexOfFirstIssue, indexOfLastIssue);
+
+        const renderIssues = currentIssues.map((issue, index) => {
+            return (
+                <div key={index}>
+                    <div className="AccessibilityReportHeader">
+                        <h3>Element with Accessibility Issue</h3>
+                        <p>{issue.id}</p>
+                    </div>
+                    <div className="AccessibilityReportBody">
+                        <div className="simpleDescription">
+                            <h4>Simple Description of Issue</h4>
+                            <p>{issue.help}</p>
+                        </div>
+                        <div className="description">
+                            <h4>Description</h4>
+                            <p>{issue.description}</p>
+                        </div>
+                        <div className="impact">
+                            <h4>Impact</h4>
+                            <p>{issue.impact}</p>
+                        </div>
+                        <div className="helpUrl">
+                            <h4>Helpful Link</h4>
+                            <a href={issue.helpUrl} target="_blank" rel="noopener noreferrer">{issue.helpUrl}</a>
+                        </div>
+                        <div>
+                            <h3>Instances of Accessibility Issues</h3>
+                            {issue.nodes.map(function (node: any, index: any) {
+                                return (
+                                    <ul>
+                                        <li key={index}>
+                                            <span><h3>Failure Summary : </h3><p>{node.failureSummary}</p></span>
+                                            <span><h3>HTML : </h3><p>{node.html}</p></span>
+                                            <span><h3>Impact : </h3><p>{node.impact}</p></span>
+                                        </li>
+                                    </ul>
+                                )
+                            })}
+                        </div>
+                    </div>
+                </div>
+            )
+        });
+
+        let renderPrevButton = null;
+        if (isPrevBtnActive === 'disabled') {
+            renderPrevButton = (
+                <div className="prevButton">
+                    <span id="btnPrev"> Prev </span>
+                </div>
+            )
+        }
+        else {
+            renderPrevButton = (
+                <div className="prevButton">
+                    <a href="#" id="btnPrev" onClick={this.btnPrevClick}> Prev </a>
+                </div>
+            )
+        }
+        let renderNextBtn = null;
+        if (isNextBtnActive === 'disabled') {
+            renderNextBtn = (
+                <div className="nextButton">
+                    <span id="btnNext"> Next </span>
+                </div>
+            )
+        }
+        else {
+            renderNextBtn = (
+                <div className="nextButton">
+                    <a href="#" id="btnNext" onClick={this.btnNextClick}> Next </a>
+                </div>
+            )
+        }
+
+        return (
+            <div data-id="menuPanel" className="AccessibilityReport">
+                <div>
+                    {renderIssues}
+                </div>
+                <div className={styles.pagination}>
+                    <div>
+                        {renderPrevButton}
+                    </div>
+                    <div>
+                        {renderNextBtn}
+                    </div>
+                </div>
+                <div style={{ border: 1, borderStyle: "solid", borderColor: "lightgray" }}>
+                    <p> Want to learn more about the web accessibility issues? Chat with our AI bot for help: </p>
+                    <AccessibilityChatBotButton onclickHandler={this.props.onclickHandler} runID={this.state.runID} />
+                </div>
+
+            </div>
+        );
+
+
+    }
+
     private saveAccessibilityErrorsInList() {
 
         const runDate = new Date();
@@ -131,37 +273,37 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
 
     setPrevAndNextBtnClass(listid: any) {
         let totalPage = Math.ceil(this.state.data.length / this.state.issuePerPage);
-        this.setState({isNextBtnActive: 'disabled'});
-        this.setState({isPrevBtnActive: 'disabled'});
-        if(totalPage === listid && totalPage > 1){
-            this.setState({isPrevBtnActive: ''});
+        this.setState({ isNextBtnActive: 'disabled' });
+        this.setState({ isPrevBtnActive: 'disabled' });
+        if (totalPage === listid && totalPage > 1) {
+            this.setState({ isPrevBtnActive: '' });
         }
-        else if(listid === 1 && totalPage > 1){
-            this.setState({isNextBtnActive: ''});
+        else if (listid === 1 && totalPage > 1) {
+            this.setState({ isNextBtnActive: '' });
         }
-        else if(totalPage > 1){
-            this.setState({isNextBtnActive: ''});
-            this.setState({isPrevBtnActive: ''});
+        else if (totalPage > 1) {
+            this.setState({ isNextBtnActive: '' });
+            this.setState({ isPrevBtnActive: '' });
         }
     }
 
     btnPrevClick() {
-        if((this.state.currentPage -1) % this.state.pageBound === 0 ) {
-            this.setState({upperPageBound: this.state.upperPageBound - this.state.pageBound});
-            this.setState({lowerPageBound: this.state.lowerPageBound - this.state.pageBound});
+        if ((this.state.currentPage - 1) % this.state.pageBound === 0) {
+            this.setState({ upperPageBound: this.state.upperPageBound - this.state.pageBound });
+            this.setState({ lowerPageBound: this.state.lowerPageBound - this.state.pageBound });
         }
         let listid = this.state.currentPage - 1;
-        this.setState({currentPage: listid});
+        this.setState({ currentPage: listid });
         this.setPrevAndNextBtnClass(listid);
     }
 
     btnNextClick() {
-        if((this.state.currentPage +1) > this.state.upperPageBound ) {
-            this.setState({upperPageBound: this.state.upperPageBound + this.state.pageBound});
-            this.setState({lowerPageBound: this.state.lowerPageBound + this.state.pageBound});
+        if ((this.state.currentPage + 1) > this.state.upperPageBound) {
+            this.setState({ upperPageBound: this.state.upperPageBound + this.state.pageBound });
+            this.setState({ lowerPageBound: this.state.lowerPageBound + this.state.pageBound });
         }
         let listid = this.state.currentPage + 1;
-        this.setState({currentPage: listid});
+        this.setState({ currentPage: listid });
         this.setPrevAndNextBtnClass(listid);
     }
 
@@ -172,8 +314,8 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
 
     public render(): React.ReactElement<IAccessibilityReportProps> {
 
-        const {data, currentPage, issuePerPage, upperPageBound, lowerPageBound, isNextBtnActive, isPrevBtnActive} = this.state;
-        
+        const { data, currentPage, issuePerPage, upperPageBound, lowerPageBound, isNextBtnActive, isPrevBtnActive } = this.state;
+
         const indexOfLastIssue = currentPage * issuePerPage;
         const indexOfFirstIssue = indexOfLastIssue - issuePerPage;
         const currentIssues = data.slice(indexOfFirstIssue, indexOfLastIssue);
@@ -211,13 +353,13 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
                             </table>
                         </div>
                         <div className={styles.issueInstancesHeader}>
-                                <h3>Instances of Accessibility Issues</h3>
-                                <p>Amount of Instances : {issue.nodes.length}</p>
+                            <h3>Instances of Accessibility Issues</h3>
+                            <p>Amount of Instances : {issue.nodes.length}</p>
                         </div>
                         <div className={styles.issueInstances}>
                             {issue.nodes.length > 0 ?
                                 issue.nodes.map(function (node: any, index: number) {
-                                    return(
+                                    return (
                                         <ul>
                                             <li key={index} className={styles.issueInstanceItem}>
                                                 <span>{node.html}</span>
@@ -232,7 +374,7 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
                         </div>
                     </div>
                 </div>
-            )    
+            )
         });
 
         const pageNumbers = [];
@@ -241,7 +383,7 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
         }
 
         const renderPageNumbers = pageNumbers.map(pageNumber => {
-            if(pageNumber === 1 && currentPage === 1) {
+            if (pageNumber === 1 && currentPage === 1) {
                 return (
                     <li key={pageNumber} className={styles.pageNumbers}>
                         <a href='#' id={String(pageNumber)} onClick={this.handleClick}>
@@ -250,7 +392,7 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
                     </li>
                 )
             }
-            else if((pageNumber < upperPageBound + 1) && pageNumber > lowerPageBound) {
+            else if ((pageNumber < upperPageBound + 1) && pageNumber > lowerPageBound) {
                 return (
                     <li key={pageNumber} className={styles.pageNumbers}>
                         <a href='#' id={String(pageNumber)} onClick={this.handleClick}>
@@ -262,7 +404,7 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
         })
 
         let renderPrevButton = null;
-        if(isPrevBtnActive === 'disabled') {
+        if (isPrevBtnActive === 'disabled') {
             renderPrevButton = (
                 <div className="prevButton">
                     <span id="btnPrev"> Prev </span>
@@ -277,7 +419,7 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
             )
         }
         let renderNextBtn = null;
-        if(isNextBtnActive === 'disabled') {
+        if (isNextBtnActive === 'disabled') {
             renderNextBtn = (
                 <div className="nextButton">
                     <span id="btnNext"> Next </span>

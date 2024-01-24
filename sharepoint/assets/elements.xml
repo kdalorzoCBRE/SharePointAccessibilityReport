@@ -4,6 +4,6 @@
         Title="SharePointAccessibilityReport"
         Location="ClientSideExtension.ApplicationCustomizer"
         ClientSideComponentId="6427c8d8-4b60-4e8b-b308-a76ec34eeb1a"
-        ClientSideComponentProperties="{&quot;testMessage&quot;:&quot;Test message&quot;}">
+        ClientSideComponentProperties="{&quot;Top&quot;:&quot;Top area of the page&quot;,&quot;Bottom&quot;:&quot;Bottom area in the page&quot;}">
     </CustomAction>
 </Elements>
