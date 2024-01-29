@@ -5,6 +5,7 @@ import * as strings from 'SharePointAccessibilityReportApplicationCustomizerStri
 import { ApplicationCustomizerContext } from "@microsoft/sp-application-base";
 import { AccessibilityReport } from "./AccessibilityReport";
 import { AccessibilityChatBot } from "./AccessibilityChatBot"
+import { getGUID } from "@pnp/core";
 
 export interface IAccessibilityReportTopBarProps {
     context: ApplicationCustomizerContext;
@@ -13,6 +14,7 @@ export interface IAccessibilityReportTopBarProps {
 export interface IAccessibilityReportTopBarState {
     showPanel: boolean;
     showChatBot: boolean;
+    runID: string;
 }
 
 export class AccessibilityReportTopBar extends React.Component<IAccessibilityReportTopBarProps, IAccessibilityReportTopBarState> {
@@ -21,6 +23,7 @@ export class AccessibilityReportTopBar extends React.Component<IAccessibilityRep
         this.state = {
             showPanel: false,
             showChatBot: false,
+            runID: getGUID()
         };
 
         this.handleShowChatBot = this.handleShowChatBot.bind(this);
@@ -47,27 +50,22 @@ export class AccessibilityReportTopBar extends React.Component<IAccessibilityRep
                     isLightDismiss={true}
                     id="AccessibilityReportPanel"
                 >
-                    <AccessibilityReport context={this.props.context} handleShowChatBot={this.handleShowChatBot} />
+                    <AccessibilityReport context={this.props.context} handleShowChatBot={this.handleShowChatBot} runID={this.state.runID} />
                 </Panel>
-                <AccessibilityChatBot showChatBot={this.state.showChatBot} />
+                <AccessibilityChatBot showChatBot={this.state.showChatBot} runID={this.state.runID} />
             </div>
         );
     }
 
     private _showMenu = () => {
-        console.log("show menu previous chatbot state: " + this.state.showChatBot)
         this.setState({ showPanel: true, showChatBot: false });
-        console.log("show menu chatbot state: " + this.state.showChatBot)
     }
 
     private _hideMenu = () => {
-        console.log("hide menu previous chatbot state: " + this.state.showChatBot)
         this.setState({ showPanel: false, showChatBot: false });
-        console.log("hide menu chatbot state: " + this.state.showChatBot)
     }
 
     public handleShowChatBot = () => {
-        console.log("handle previous chatbot state: " + this.state.showChatBot)
         this.setState(
             {
                 showChatBot: true,

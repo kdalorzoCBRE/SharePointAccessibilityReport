@@ -10,13 +10,14 @@ import "@pnp/sp/items";
 import { LogLevel, PnPLogging } from "@pnp/logging";
 import { IItemAddResult } from "@pnp/sp/items";
 import { ApplicationCustomizerContext } from "@microsoft/sp-application-base";
-import { getGUID } from "@pnp/core";
+//import { getGUID } from "@pnp/core";
 import { AccessibilityChatBotButton } from "./AccessibilityChatBotButton";
 import { AccessibilityError } from "./AccessibilityError";
 
 export interface IAccessibilityReportProps {
     context: ApplicationCustomizerContext,
-    handleShowChatBot: () => void
+    handleShowChatBot: () => void;
+    runID: string;
 }
 
 export interface IAccessibilityReportState {
@@ -45,7 +46,7 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
             isPrevBtnActive: 'disabled',
             isNextBtnActive: '',
             showChatBot: false,
-            runID: getGUID()
+            runID: this.props.runID
         };
         this.handleClick = this.handleClick.bind(this);
         this.btnNextClick = this.btnNextClick.bind(this);
@@ -309,7 +310,7 @@ export class AccessibilityReport extends React.Component<IAccessibilityReportPro
                 </div>
                 <div className={styles.chatBotFooter}>
                     <p> Want to learn more about the web accessibility issues? Chat with our AI bot for help: </p>
-                    <AccessibilityChatBotButton onclickHandler={this.handleShowChatBotClick} runID={this.state.runID} />
+                    <AccessibilityChatBotButton onclickHandler={this.handleShowChatBotClick} />
                 </div>
             </div>
         );
